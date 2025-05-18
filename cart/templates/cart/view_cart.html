@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h2>Your Cart</h2>
+  
+  {% if cart_items %}
+    <ul>
+      {% for item in cart_items %}
+       <li>
+        {{ item.product.name }} - {{ item.quantity }} x ₹{{ item.product.price }} =
+        ₹{{ item.total_price }}
+        <form action="{% url 'cart:update_quantity' item.product.id %}" method="POST" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" name="action" value="decrease">-</button>
+        </form>
+        {{ item.quantity }}
+        <form action="{% url 'cart:update_quantity' item.product.id %}" method="POST" style="display: inline;">
+          {% csrf_token %}
+          <button type="submit" name="action" value="increase">+</button>
+        </form>
+        <a href="{% url 'cart:remove_from_cart' item.product.id %}">Remove</a>
+
+        {% if item.product.stock == 0 %}
+          <div class="text-danger">Out of stock!</div>
+        {% elif item.quantity >= item.product.stock %}
+          <div class="text-warning">Maximum available stock reached ({{ item.product.stock }})</div>
+        {% endif %}
+       </li>
+      {% endfor %}
+
+    </ul>
+
+    <h3>Total: ₹{{ total_price }}</h3>
+  {% else %}
+    <p>Your cart is empty.</p>
+  {% endif %}
+{% endblock %}

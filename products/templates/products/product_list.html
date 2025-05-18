@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-4">All Products</h2>
+
+<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+    {% for product in products %}
+    <div class="col">
+        <div class="card h-100">
+            <a href="{% url 'product_detail' product.id %}">
+                <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            </a>
+            <div class="card-body">
+                <h5 class="card-title">{{ product.name }}</h5>
+                <p class="card-text">{{ product.description|truncatewords:20 }}</p>
+                <p class="fw-bold">Price: ₹{{ product.price }}</p>
+                <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success w-100">Add to Cart</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

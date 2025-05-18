@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="product-card" style="max-width: 800px; margin: auto;">
+    <h2>{{ product.name }}</h2>
+    <img src="{{ product.image.url }}" alt="{{ product.name }}" style="width: 100%; height: auto;">
+
+    <p>{{ product.description }}</p>
+    <p><strong>Price: ₹{{ product.price }}</strong></p>
+
+    <form method="post" action="{% url 'cart:add_to_cart' product.id %}">
+        {% csrf_token %}
+        <button type="submit" class="btn" style="background-color: #007bff; color: white;">Add to Cart</button>
+    </form>
+
+    <br>
+    <a href="{% url 'product_list' %}" class="btn" style="background-color: gray; color: white;">Back to Products</a>
+</div>
+{% endblock %}
